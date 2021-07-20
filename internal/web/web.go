@@ -10,10 +10,6 @@ import (
 	"imageapi.lavrentev.dev/rest/internal/database"
 )
 
-const (
-	internalError = "Internal server error"
-)
-
 type Server struct {
 	cfg        Config
 	db         database.Database
@@ -48,6 +44,7 @@ func NewServer(
 
 	// Methods
 	router.Methods("GET").Path("/").HandlerFunc(s.handleGetImages)
+	router.Methods("DELETE").Path("/{id}").HandlerFunc(s.handleDeleteImage)
 
 	s.httpServer = &http.Server{
 		Addr:              cfg.Addr,

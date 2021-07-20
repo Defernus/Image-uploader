@@ -16,37 +16,42 @@ type Response struct {
 	Body    interface{} `json:"body"`
 }
 
-func Success(w http.ResponseWriter, body interface{}) error {
+func Success(w http.ResponseWriter, body interface{}) {
 	result, err := json.Marshal(Response{
 		Success: true,
 		Body:    body,
 	})
 	if err != nil {
-		return err
+		panic(err)
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(result)
-	return nil
 }
 
-func Failed(w http.ResponseWriter, err Error) error {
+func Failed(w http.ResponseWriter, err Error) {
 	result, marshalErr := json.Marshal(Response{
 		Success: true,
 		Error:   &err,
 	})
 	if marshalErr != nil {
-		return marshalErr
+		panic(marshalErr)
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(err.StatusCode)
 	w.Write(result)
-	return nil
 }
 
-func NotFound(w http.ResponseWriter) error {
-	return Failed(w, Error{
+func NotFound(w http.ResponseWriter) {
+	Failed(w, Error{
 		"not_found",
 		http.StatusNotFound,
+	})
+}
+
+func InternalServerError(w http.ResponseWriter) {
+	Failed(w, Error{
+		StatusCode: http.StatusInternalServerError,
+		Message:    "Internal server error",
 	})
 }
