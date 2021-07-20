@@ -44,6 +44,7 @@ func NewServer(
 
 	// Methods
 	router.Methods("GET").Path("/").HandlerFunc(s.handleGetImages)
+	router.Methods("POST").Path("/").HandlerFunc(s.handleAddImage)
 	router.Methods("DELETE").Path("/{id}").HandlerFunc(s.handleDeleteImage)
 
 	s.httpServer = &http.Server{

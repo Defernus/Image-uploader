@@ -35,13 +35,6 @@ func main() {
 	if err := db.StartMigrations(); err != nil {
 		log.Fatal(err)
 	}
-	err = db.DB.Create(&database.Image{
-		Original:  "aaaaa",
-		Thumbnail: "bbbbbb",
-	}).Error
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	log.Info("init server")
 	server, err := web.NewServer(cfg.Web, db, log)

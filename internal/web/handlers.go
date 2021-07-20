@@ -17,6 +17,17 @@ func (s *Server) handleGetImages(w http.ResponseWriter, r *http.Request) {
 	Success(w, images)
 }
 
+func (s *Server) handleAddImage(w http.ResponseWriter, r *http.Request) {
+	image := &database.Image{}
+
+	err := s.db.DB.Create(image).Error
+	if err != nil {
+		InternalServerError(w)
+	}
+
+	Success(w, image.ID)
+}
+
 func (s *Server) handleDeleteImage(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	err := s.db.DB.Delete(&database.Image{}, vars["id"]).Error
